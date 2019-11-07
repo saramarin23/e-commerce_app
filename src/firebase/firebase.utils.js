@@ -14,6 +14,36 @@ const config = {
   measurementId: "G-0S8XD31606"
 };
 
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+  //Si no está logueado, we dont't want to do anything else
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+
+  const snapShot = await userRef.get();
+  //With this we'll figure it out if there's data there
+  //console.log(snapShot);
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      // console.log("error creating user", error.message);
+    }
+  }
+
+  return userRef;
+};
+//Va a ser asìncrono porque hace una petición API
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
