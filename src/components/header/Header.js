@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+//It lets us modify our component to have access to things related to redux
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 //This is a special syntax in React for importing SVG.
 import "./Header.scss";
@@ -35,4 +37,9 @@ const Header = ({ currentUser }) => (
   </div>
 );
 
-export default Header;
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
+
+export default connect(mapStateToProps)(Header);
+//Now we're getting that null value as currentUser being passed as currentUser

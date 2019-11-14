@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
+import { connect } from "react-redux";
 import "./App.css";
 
 import Header from "./components/header/Header";
@@ -8,45 +9,44 @@ import SignInSignUp from "./pages/signIn-signUp/signIn-signUp";
 import ShopPage from "./pages/shop/Shop";
 
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import { setCurrentUser } from "./redux/user/user.actions";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    this.state = {
-      currentUser: null
-    };
-  }
+  //   this.state = {
+  //     currentUser: null
+  //   };
+  // } Because of redux, we don't need the state anymore
 
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props; //Destructuring
+
     //Whenever somebody signs in/out we want to be aware of that change
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot(snapShot => {
-          this.setState(
-            {
-              currentUser: { id: snapShot.id, ...snapShot.data() }
-            },
-            () => {
-              // console.log(this.state);
-            }
+          // this.setState(
+          setCurrentUser(
+            //  { currentUser:
+            { id: snapShot.id, ...snapShot.data() }
           );
         });
-        // console.log(this.state); Aquí no puede ir xq setState es asíncrono y puede que no se le haya terminado de llamar
       } //if it exists
       else {
-        this.setState({ currentUser: userAuth });
+        setCurrentUser(userAuth);
+        //We just need what we want to update
       }
 
       // this.setState({ currentUser: user });
       // createUserProfileDocument(userAuth);
       // console.log(userAuth);
     });
-    //Method that we get from firebase
   }
 
   componentWillUnmount() {
@@ -55,13 +55,11 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.currentUser);
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          {/* Exact sin nada sería true, luego sería el path exacto */}
           <Route path="/shop" component={ShopPage} />
           <Route path="/signin" component={SignInSignUp} />
         </Switch>
@@ -70,4 +68,9 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+  //The user that will be used as the payload
+});
+
+export default connect(null, mapDispatchToProps)(App);
