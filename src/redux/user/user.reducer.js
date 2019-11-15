@@ -1,3 +1,5 @@
+import { UserActionTypes } from "./user.types";
+
 const INITIAL_STATE = {
   currentUser: null
 };
@@ -5,7 +7,7 @@ const INITIAL_STATE = {
 //If state is null, then it will get initial_state (ES6 feature)
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "SET_CURRENT_USER":
+    case UserActionTypes.SET_CURRENT_USER:
       //if the case is = set_current_user, I want to return this new object
       return {
         ...state,

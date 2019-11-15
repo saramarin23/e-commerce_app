@@ -42,4 +42,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Header);
-//Now we're getting that null value as currentUser being passed as currentUser
+//Now we're getting that null value as currentUser being passed as currentUser, so now we can delete the props in app.js
