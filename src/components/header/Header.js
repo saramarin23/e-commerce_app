@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 //It lets us modify our component to have access to things related to redux
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 //This is a special syntax in React for importing SVG.
+import CartIcon from "../cart-icon/CartIcon";
+import CartDropdown from "../cart-dropdown/CartDropdown";
 import "./Header.scss";
 
 import { auth } from "../../firebase/firebase.utils";
 
-const Header = ({ currentUser }) => (
+const Header = ({ currentUser, hidden }) => (
   <div className="header">
     <Link className="logo-container" to="/">
       <Logo className="logo" />
@@ -33,12 +35,16 @@ const Header = ({ currentUser }) => (
         </Link>
       )}
       {/* auth.signOut viene dada por la librería de Firebase */}
+      <CartIcon />
     </div>
+    {hidden ? null : <CartDropdown />}
   </div>
 );
 
-const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+  // currentUser: state.user.currentUser
+  currentUser, //Lo hemos destructurado
+  hidden
 });
 
 export default connect(mapStateToProps)(Header);
