@@ -1,15 +1,18 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import "./App.css";
 
 import Header from "./components/header/Header";
 import HomePage from "./pages/homepage/Homepage";
 import SignInSignUp from "./pages/signIn-signUp/signIn-signUp";
 import ShopPage from "./pages/shop/Shop";
+import CheckoutPage from "./pages/checkout/Checkout";
 
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from "./redux/user/user.actions";
+import { selectCurrentUser } from "./redux/user/user.selectors";
 
 class App extends React.Component {
   // constructor(props) {
@@ -61,6 +64,8 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
+          <Route exact path="/checkout" component={CheckoutPage} />
+          {/* Exact because we don't have anything after /checkout/ */}
           <Route
             exact
             path="/signin"
@@ -75,8 +80,8 @@ class App extends React.Component {
 }
 //render is exactly like the render above. Ahora cuando entramos ya logueados y accedemos a /signin nos redirecciona automáticamente a la homepage, y cuando nos logueamos directamente nos devuelve a la homepage
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
 });
 
 const mapDispatchToProps = dispatch => ({
