@@ -21,7 +21,7 @@ class App extends React.Component {
   //   this.state = {
   //     currentUser: null
   //   };
-  // } Because of redux, we don't need the state anymore
+  // } Because of redux, we don't need the state anymore. We move it into a reducer
 
   unsubscribeFromAuth = null;
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 //It lets us modify our component to have access to things related to redux
-import { crateStructuredSelector, createStructuredSelector } from "reselect";
+import { createStructuredSelector } from "reselect";
 
 import CartIcon from "../cart-icon/CartIcon";
 import CartDropdown from "../cart-dropdown/CartDropdown";
